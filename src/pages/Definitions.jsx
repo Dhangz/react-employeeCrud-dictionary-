@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
 import { v4 as uuidv4 } from 'uuid';
 import { useParams, useNavigate } from "react-router-dom";
-
+import NotFound from '../components/NotFound';
 function Definitions() {
 
     const [word, setWord] = useState([]);
+    const [notFound, setNotFound] = useState(false);
+
     const navigate = useNavigate();
     let { search } = useParams();
 
@@ -14,7 +16,7 @@ function Definitions() {
         .then((response) => {
             if (!response.ok) {
                 console.log(response.status);
-                navigate("/404");
+                setNotFound(true)
             }
             return response.json()
         })
@@ -25,6 +27,11 @@ function Definitions() {
         })
         
     }, [navigate, search]);
+
+
+    if (notFound){
+        return <NotFound />
+    }
 
     return (
 

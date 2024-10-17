@@ -18,7 +18,7 @@ function Employee(props) {
     <img className="object-cover h-[100px] w-[100px] block mx-auto rounded-full sm:mx-0 sm:shrink-0" src={props.img ? props.img : "https://tse4.mm.bing.net/th?id=OIP.g6sTdGfbyN2DffeFBszqqQAAAA&pid=Api&P=0&h=220"} />
     <div className="text-center space-y-2 sm:text-left">
         <div className="space-y-0.5">
-            <p className="text-lg text-black font-semibold">
+            <p className="text-lg text-black font-semibold text-ellipsis overflow-hidden ...">
                 {props.name}
             </p>
             <p className="text-slate-500 font-medium">

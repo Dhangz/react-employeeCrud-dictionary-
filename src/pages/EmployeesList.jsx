@@ -91,13 +91,11 @@ function EmployeeList() {
 
     }
 
-    
-
     return (
         <>
         { employees.length > 0 ? (
             <>
-                <div className="mx-auto max-w-7xl flex flex-wrap align-center justify-center my-3 ">
+                <div className=" mx-auto max-w-7xl flex flex-wrap align-center justify-center my-3">
                 {
                 employees.map((element) => {
         
