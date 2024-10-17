@@ -67,7 +67,7 @@ function EditEmployee(props) {
 }
 
 EditEmployee.propTypes = {
-    id: PropTypes.string,
+    id: PropTypes.number,
     name: PropTypes.string,
     role: PropTypes.string,
     img: PropTypes.object,

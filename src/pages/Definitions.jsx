@@ -15,7 +15,6 @@ function Definitions() {
         fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + search)
         .then((response) => {
             if (!response.ok) {
-                console.log(response.status);
                 setNotFound(true)
             }
             return response.json()

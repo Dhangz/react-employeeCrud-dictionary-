@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-
+import { Link} from 'react-router-dom'
 function Customers() {
 
     const [customers, setCustomers] = useState([]);
@@ -8,20 +8,18 @@ function Customers() {
 
     useEffect(() => {
         fetch(url)
-        .then((response) => response.json())
-        .then((data) => setCustomers(data.customers)
-        )
+        .then((response) =>  response.json())
+        .then((data) => setCustomers(data.customers))
     }, []);
-
-
-
+    
     return (
         <>
+
+        
         {
             customers.map((customer) => {
                 return <ul className="border" key={customer.id}>
-                    <li><strong>{customer.name}</strong></li>
-                    <li>{customer.industry}</li>
+                    <li><Link to={'/Customers/' + customer.id}>{customer.name}</Link></li>
                 </ul>
             })
         }
