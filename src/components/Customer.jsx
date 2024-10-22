@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
 
 function Customer() {
 
     const { id } = useParams();
 
+    const navigate = useNavigate();
     const [customer, setCustomer ] = useState("");
     const [notFound, setNotFound ] = useState(false);
 
@@ -35,7 +36,21 @@ function Customer() {
         <>  
             <p>{customer.id}</p>
             <p>{customer.name}</p>
-            <p>{customer.industry}</p>
+            <p>{customer.industry}</p> 
+            
+            <button onClick={() => {
+                fetch("http://127.0.0.1:8000/api/customers/" + id, {
+                    method: "DELETE", headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then((response) => {
+                    if (!response.ok){
+                        throw new Error('Something went wrong');
+                    }
+                    navigate('/Customers')
+                    
+                }).catch((e) => console.log(e))
+            }}>Delete</button> <br />
 
             <Link to={'/Customers'}>Go back</Link>
         </>
