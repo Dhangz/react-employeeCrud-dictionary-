@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { v4 as uuidv4 } from 'uuid';
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import NotFound from '../components/NotFound';
 function Definitions() {
 
@@ -48,6 +48,8 @@ function Definitions() {
                 }
             </>) : null
         }
+
+        <Link to={'/Dictionary'}>Search Again</Link>
         
         </>
         

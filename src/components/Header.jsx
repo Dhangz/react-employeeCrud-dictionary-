@@ -1,19 +1,29 @@
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useLocation  } from 'react-router-dom'
 
 const navigation = [
     { name: 'Home', href: '/', },
     { name: 'Dictionary', href: '/Dictionary', },
     { name: 'Employees', href: '/Employees', },
-    { name: 'Customer', href: '/Customers', },
+    { name: 'Customers', href: '/Customers', },
 ]
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
+
 export default function Header(props) {
+
+    const location = useLocation(); // Get current route location
+
+    // Dynamically set page title based on route
+    const getPageTitle = () => {
+        const currentNav = navigation.find(item => item.href === location.pathname);
+        return currentNav ? currentNav.name : 'Dashboard';
+    }; 
+
     return (
         <div className="min-h-full">
             <Disclosure as="nav" className="bg-white-800">
@@ -101,11 +111,11 @@ export default function Header(props) {
             </Disclosure>
             <header className="bg-white mx-auto max-w-7xl">
                 <div className="mx-auto max-w-7xl  px-4 py-6 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
+                    <h1 className="text-3xl font-bold tracking-tight text-gray-900">{getPageTitle()}</h1>
                 </div>
             </header>
             <main>
-                <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8"> {props.children}</div>
+                <div className="mx-auto border max-w-7xl px-4 py-6 sm:px-6 lg:px-8"> {props.children}</div>
             </main>
         </div>
 
