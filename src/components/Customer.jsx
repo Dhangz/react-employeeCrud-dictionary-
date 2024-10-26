@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 
+import { useContext } from "react";
+import { LoginContext } from '../App'
+import { baseUrl } from "../Shared";
 
 function Customer() {
 
     const { id } = useParams();
-
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const [isLoggedIn, setIsLoggedIn] = useContext(LoginContext);
     const [customer, setCustomer] = useState("");
     const [tempCustomer, setTempCustomer] = useState({ name: "", industry: "" });
     const [changed, setChanged] = useState(false);
@@ -14,13 +19,11 @@ function Customer() {
     const [error, setError] = useState("");
 
 
-    const url = "http://127.0.0.1:8000/api/customers/" + id;
-
+    const url =  baseUrl + "api/customers/" + id;
 
     useEffect(() => {
 
         let equal = true;
-        // console.log(customer, tempCustomer)
         if (customer.name !== tempCustomer.name) equal = false;
         if (customer.industry !== tempCustomer.industry) equal = false;
 
@@ -31,8 +34,22 @@ function Customer() {
     }, [customer, tempCustomer]);
 
     useEffect(() => {
-        fetch(url)
+        fetch(url, {
+            headers: {
+                'Content-Type' : 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('access')
+            },
+        })
             .then((response) => {
+
+                if (response.status === 401){
+                    setIsLoggedIn(false);
+                    navigate('/login', {
+                        state : {
+                            previousUrl : location.pathname
+                        }
+                    });
+                }
 
                 if (response.status == 404) {
                     setNotFound(true)
@@ -43,9 +60,8 @@ function Customer() {
             .then((data) => {
                 setCustomer(data.customer)
                 setTempCustomer(data.customer)
-
             })
-    }, [url]);
+    }, []);
 
 
     function validateCustomer() {
@@ -66,11 +82,21 @@ function Customer() {
         fetch(url, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type' : 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('access')
             },
             body: JSON.stringify(tempCustomer)
         })
             .then((response) => {
+                if (response.status === 401){
+                    setIsLoggedIn(false);
+                    navigate('/login', {
+                        state : {
+                            previousUrl : location.pathname
+                        }
+                    });
+                }
+
                 if (!response.ok) {
                     throw new Error('Something went wrong');
                 }
@@ -90,7 +116,6 @@ function Customer() {
 
     return (
         <>  
-     
 
         
             <div className="w-full max-w-sm">
@@ -141,10 +166,21 @@ function Customer() {
 
             <button className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 m-1 px-4 rounded'  onClick={() => {
                 fetch("http://127.0.0.1:8000/api/customers/" + id, {
-                    method: "DELETE", headers: {
-                        'Content-Type': 'application/json'
-                    }
+                    method: "DELETE", 
+                    headers: {
+                        'Content-Type' : 'application/json',
+                        Authorization: 'Bearer ' + localStorage.getItem('access')
+                    },
                 }).then((response) => {
+                    if (response.status === 401){
+                        setIsLoggedIn(false);
+                        navigate('/login', {
+                            state : {
+                                previousUrl : location.pathname
+                            }
+                        });
+                    }
+
                     if (!response.ok) {
                         throw new Error('Something went wrong');
                     }

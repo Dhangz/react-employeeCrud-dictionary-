@@ -1,6 +1,9 @@
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { NavLink, useLocation  } from 'react-router-dom'
+import { NavLink, useLocation} from 'react-router-dom'
+import { useContext } from 'react'
+import { LoginContext } from '../App'
+
 
 const navigation = [
     { name: 'Home', href: '/', },
@@ -15,14 +18,17 @@ function classNames(...classes) {
 
 
 export default function Header(props) {
+    
+    let [isLoggedIn, setIsLoggedIn] = useContext(LoginContext);
 
     const location = useLocation(); // Get current route location
+
 
     // Dynamically set page title based on route
     const getPageTitle = () => {
         const currentNav = navigation.find(item => item.href === location.pathname);
         return currentNav ? currentNav.name : 'Dashboard';
-    }; 
+    };
 
     return (
         <div className="min-h-full">
@@ -66,6 +72,27 @@ export default function Header(props) {
                                                     {item.name}
                                                 </NavLink>
                                             ))}
+
+                                            {
+                                                isLoggedIn ? (
+                                                    <NavLink
+                                                        to={'/login'}
+                                                        className='no-underline rounded-md px-3 py-2 text-sm font-medium text-black hover:bg-gray-100 hover:text-black'
+                                                        onClick={() => {
+                                                            setIsLoggedIn(false);
+                                                            localStorage.clear();                                                        
+                                                        }}  
+                                                    >
+                                                        {'Logout'}
+                                                    </NavLink>
+                                                ) : (<NavLink
+                                                    to={'/login'}
+                                                    className='no-underline rounded-md px-3 py-2 text-sm font-medium text-black hover:bg-gray-100 hover:text-black'
+                                                >
+                                                    {'Login'}
+                                                </NavLink>)
+                                            }
+
                                         </div>
                                     </div>
                                 </div>
@@ -97,10 +124,16 @@ export default function Header(props) {
                                         }}
                                         aria-current={item.current ? 'page' : undefined}
                                     >
-
                                         {item.name}
                                     </NavLink>
                                 ))}
+
+                                <NavLink
+                                    to={isLoggedIn ? '/logout' : '/login'}
+                                    className='no-underline rounded-md px-3 py-2 text-sm font-medium text-black hover:bg-gray-100 hover:text-black'
+                                >
+                                    {isLoggedIn ? 'Logout' : 'Login'}
+                                </NavLink>
                             </div>
                         </DisclosurePanel>
 
@@ -115,7 +148,7 @@ export default function Header(props) {
                 </div>
             </header>
             <main>
-                <div className="mx-auto border max-w-7xl px-4 py-6 sm:px-6 lg:px-8"> {props.children}</div>
+                <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8"> {props.children}</div>
             </main>
         </div>
 

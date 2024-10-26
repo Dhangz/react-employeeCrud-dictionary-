@@ -19,9 +19,7 @@ function Definitions() {
             }
             return response.json()
         })
-        .then((data) => {
-            // console.log(data[0].meanings[0])
-            
+        .then((data) => {           
             setWord(data[0].meanings)
         })
         
